@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'home.dart';
+import 'survey.dart';
 import 'utils/showAlert.dart';
 
 class LoginForm extends StatefulWidget {
@@ -19,39 +19,30 @@ class _LoginScreenState extends State<LoginForm>  {
     });
     try {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('urlApi', 'http://192.168.43.146:8080/onemobile/api/');
-    final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;  
-    final accessToken = prefs.getString('access_token');  
-    final username = prefs.getString('username');
-    if (isLoggedIn) {
-      // Pengguna sudah login, langsung ke halaman Home
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(accessToken: accessToken.toString(), username: username.toString(),)));
+    String url = "http://192.168.43.146:8080/onemobile/api/";    
+    final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;      
+    if (isLoggedIn) {      
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SurveyScreen(accessToken: prefs.getString('access_token').toString(), id: prefs.getInt('id').toString(), url: url)));
       setState(() {
       isLoading = false;
     });
-    } else {
-      // Pengguna belum login, jalankan proses login
+    } else {      
       final result = await FlutterWebAuth.authenticate(
       url: 'https://github.com/login/oauth/authorize?client_id=b7075d1df11ac68c2983&scope=user',
       callbackUrlScheme: 'oneopinion', // Ganti dengan skema kustom yang Anda konfigurasi
     );    
-    if (result.isNotEmpty) {
-      // Pengguna berhasil login dengan GitHub
-      // Lakukan apa yang diperlukan setelah login sukses
-      // Simpan status login setelah berhasil login                      
+    if (result.isNotEmpty) {                            
         final data = {
-          "code": Uri.parse(result).queryParameters['code'].toString(),
-          // Tambahkan parameter lain jika diperlukan.
+          "code": Uri.parse(result).queryParameters['code'].toString(),          
         };    
         final response = await http.post(
-          Uri.parse("${prefs.getString("urlApi")}user/setToken"),
+          Uri.parse("${url}user/setToken"),
           body: jsonEncode(data),
           headers: {
              "Content-Type": "application/json",
           },
         );
-        if (response.statusCode == 200) {
-          // Respon sukses.          
+        if (response.statusCode == 200) {              
           final parsedJson = json.decode(response.body);
           final responseCode = parsedJson['responseCode'];
           if(responseCode == "200"){            
@@ -60,7 +51,7 @@ class _LoginScreenState extends State<LoginForm>  {
             await prefs.setString('username', parsedJson['username']);
             await prefs.setString('email', parsedJson['email']);
             await prefs.setInt('id', parsedJson['id']);
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(accessToken: parsedJson['token'], username: parsedJson['username'])));
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SurveyScreen(accessToken: prefs.getString('access_token').toString(), id: prefs.getInt('id').toString(), url: url)));
             setState(() {
       isLoading = false;
     });
@@ -69,16 +60,13 @@ class _LoginScreenState extends State<LoginForm>  {
             setState(() {
       isLoading = false;
     });
-          }          
-          // Selanjutnya, Anda dapat memproses data sesuai dengan kebutuhan.
-        } else {
-          // Respon gagal
+          }                    
+        } else {          
           showAlert(context, "HTTP Error: ${response.statusCode}");
           setState(() {
       isLoading = false;
     });
-        }        
-      // Navigasi ke halaman "Home" atau lakukan apa yang diperlukan.      
+        }              
     } 
     }
   } catch (e) {
@@ -100,7 +88,7 @@ class _LoginScreenState extends State<LoginForm>  {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                Icons.account_circle, // Ganti dengan ikon yang sesuai
+                Icons.account_circle, 
                 size: 48.0,
                 color: Colors.white,
               ),
@@ -112,7 +100,7 @@ class _LoginScreenState extends State<LoginForm>  {
                     _handleGitHubLogin(context);                  
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.black, // Mengubah warna latar belakang tombol menjadi hitam
+                    primary: Colors.black, 
                   ),
                   child: Text('Login with GitHub'),
                 ),

@@ -1,12 +1,9 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'main.dart';
 import 'profile.dart';
 import 'history.dart';
 import 'survey.dart';
-import 'package:http/http.dart' as http;
-import 'utils/showAlert.dart';
 
 class HomeScreen extends StatefulWidget {
   final String accessToken;
@@ -18,14 +15,19 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState  extends  State<HomeScreen> {  
-  String userName = 'Loading.....';
-  String userEmail = 'Loading.....';
+class _HomeScreenState  extends  State<HomeScreen> {
+  Map<String, String> _userData = {};
+     
 
   @override
   void initState() {
-    super.initState();
+    super.initState();    
     _fetchUserData();
+  }
+
+  Future<void> _fetchUserData() async {
+    final prefs = await SharedPreferences.getInstance();    
+    _userData.addAll({"username": prefs.getString("username").toString(), "email": prefs.getString("email").toString()});    
   }
 
   final List<Survey> availableSurveys = [
@@ -34,40 +36,6 @@ class _HomeScreenState  extends  State<HomeScreen> {
     Survey('Survey 3', '12 Poin', '7 Pertanyaan'),
     // Tambahkan survei lainnya sesuai kebutuhan
   ];
-
-  Future<void> _fetchUserData() async {
-    final prefs = await SharedPreferences.getInstance();  
-    userName = prefs.getString("username")!;
-    userEmail = prefs.getString("email")!;      
-    final data = {
-          "token": prefs.getString("access_token"),
-          "id" : prefs.getInt("id").toString()
-          // Tambahkan parameter lain jika diperlukan.
-    };    
-    final response = await http.post(
-      Uri.parse("${prefs.getString("urlApi")}user/getMyData"),
-      body: jsonEncode(data),
-      headers: {
-         "Content-Type": "application/json",
-      },
-    );
-    if (response.statusCode == 200) {
-      // Respon sukses.      
-      final parsedJson = json.decode(response.body);
-      final responseCode = parsedJson['responseCode'];
-      if(responseCode == "200"){    
-        final responseData = parsedJson['data'];        
-        userName = responseData['username'];
-        userEmail = responseData['email'];        
-      } else{
-        showAlert(context, "Terjadi Error Fetching Data");
-      }          
-      // Selanjutnya, Anda dapat memproses data sesuai dengan kebutuhan.
-    } else {
-      // Respon gagal
-      showAlert(context, "HTTP Error Fetching Data : ${response.statusCode}");
-    }
-  }
   
   Future<void> _handleLogout(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
@@ -122,7 +90,7 @@ class _HomeScreenState  extends  State<HomeScreen> {
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => SurveyScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => SurveyScreen(accessToken: widget.accessToken, id: widget.username, url: "random")));
                   // Tambahkan logika ketika survei dipilih
                   // Anda dapat membuka halaman survei atau melakukan tindakan lain sesuai kebutuhan
                 },
@@ -182,25 +150,30 @@ class _HomeScreenState  extends  State<HomeScreen> {
           color: Color(0xFFFF993C),
           child: ListView(
             children: [
-              UserAccountsDrawerHeader(
-                accountName: Text(userName),
-                accountEmail: Text(userEmail),
-                currentAccountPicture: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: Icon(
-                    Icons.person,
-                    size: 40.0,
-                    color: Color(0xFFFF993C),
+              FutureBuilder<void>(
+                    future: _fetchUserData(),
+                    builder: (context, snapshot) {                      
+                        return UserAccountsDrawerHeader(
+                          accountName: Text(_userData["username"].toString()),
+                          accountEmail: Text(_userData["email"].toString()),
+                          currentAccountPicture: CircleAvatar(
+                            backgroundColor: Colors.white,
+                            child: Icon(
+                              Icons.person,
+                              size: 40.0,
+                              color: Color(0xFFFF993C),
+                            ),
+                          ),
+                          decoration: BoxDecoration(
+                            color: Color(0xFFFF993C),
+                          ),
+                          onDetailsPressed: () {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfileScreen()));
+                          },
+                        );                    
+                    },
                   ),
-                ),
-                decoration: BoxDecoration(
-                  color: Color(0xFFFF993C), // Warna latar belakang UserAccountsDrawerHeader #ff993c
-                ),
-                onDetailsPressed: () {
-                Navigator.of(context).pop(); // Tutup sidebar
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfileScreen())); // Navigasi ke halaman profil
-              },
-              ),
               ListTile(
                   leading: Icon(Icons.home),
                 title: Text(
