@@ -18,8 +18,9 @@ class _LoginScreenState extends State<LoginForm>  {
       isLoading = true;
     });
     try {
-    final prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();    
     String url = "http://192.168.43.146:8080/onemobile/api/";    
+    prefs.setString('url', url);
     final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;      
     if (isLoggedIn) {      
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SurveyScreen(accessToken: prefs.getString('access_token').toString(), id: prefs.getInt('id').toString(), url: url)));
@@ -51,6 +52,7 @@ class _LoginScreenState extends State<LoginForm>  {
             await prefs.setString('username', parsedJson['username']);
             await prefs.setString('email', parsedJson['email']);
             await prefs.setInt('id', parsedJson['id']);
+            await prefs.setInt('poin', parsedJson['poin']);
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SurveyScreen(accessToken: prefs.getString('access_token').toString(), id: prefs.getInt('id').toString(), url: url)));
             setState(() {
       isLoading = false;

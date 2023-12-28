@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'utils/showAlert.dart';
+import 'home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SurveyScreen extends StatefulWidget {
   final String accessToken;
@@ -25,7 +27,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
   String answerD = "Loading.....";
   String ownerUsername = "Loading.....";
   String surveyId = "";
-  // String answer = "";  
+  int poin = 0;
   bool hasRunAsync = false;
   bool isLoading = false;
 
@@ -44,6 +46,8 @@ class _SurveyScreenState extends State<SurveyScreen> {
   }
 
   Future<void> _fetchSurvey() async {    
+    final prefs = await SharedPreferences.getInstance(); 
+    poin = prefs.getInt('poin')!.toInt();
     try {      
       final data = {
         "token": widget.accessToken,
@@ -100,7 +104,10 @@ class _SurveyScreenState extends State<SurveyScreen> {
       if (response.statusCode == 200) {          
         final parsedJson = json.decode(response.body);
         final responseCode = parsedJson['responseCode'];
-        if(responseCode == "200"){                        
+        if(responseCode == "200"){             
+          poin = poin + 1;
+          final prefs = await SharedPreferences.getInstance(); 
+          await prefs.setInt('poin', poin);
         } else{
           showAlert(context, parsedJson['responseMessage']);          
         }                    
@@ -120,6 +127,12 @@ class _SurveyScreenState extends State<SurveyScreen> {
   Widget build(BuildContext context) {     
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {              
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url, poin: poin.toString())));
+            },
+          ),
         backgroundColor: Color(0xFFFD632D),
         title: Text('Survey'), 
       ),
@@ -136,8 +149,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
                 ),),
                 Text("by $ownerUsername",
                 style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,                  
+                  fontSize: 10,                                   
                 ),),
                 RadioListTile(value: "A",
                 groupValue: selectedAnswer,

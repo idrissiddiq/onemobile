@@ -35,7 +35,7 @@ void surveyErrorAlert(BuildContext context, String message) {
           ElevatedButton(
             child: Text('Close'),
             onPressed: () {
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(accessToken: "asdsada", username: "asdsada")));
+              // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(accessToken: "asdsada", username: "asdsada")));
             },
             style: ElevatedButton.styleFrom(
                   primary: Color(0xFFFF993C),

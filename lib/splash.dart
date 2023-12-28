@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login.dart';
-import 'home.dart';
+import 'survey.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -18,8 +18,12 @@ class _SplashScreenState extends State<SplashScreen> {
         if (isLoggedIn) {
           checkToken().then((access_token){
             if(access_token!.isNotEmpty){
-              checkUsername().then((username){
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(accessToken: access_token.toString(), username: username.toString())));
+              checkId().then((id){
+                checkUrl().then((url){
+                  checkPoin().then((poin){
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SurveyScreen(accessToken: access_token.toString(), id: id.toString(), url: url.toString())));
+                  });                  
+                });                
               });              
             }
           });          
@@ -40,9 +44,19 @@ class _SplashScreenState extends State<SplashScreen> {
     return prefs.getString('access_token');
   }
 
-  Future<String?> checkUsername() async {
+  Future<int?> checkId() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('username');
+    return prefs.getInt('id');
+  }
+
+  Future<int?> checkPoin() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('poin');
+  }
+
+  Future<String?> checkUrl() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('url');
   }
 
   @override

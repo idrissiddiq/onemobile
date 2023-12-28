@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'main.dart';
-import 'profile.dart';
-import 'history.dart';
+import 'mySurvey.dart';
 import 'survey.dart';
+import 'createSurvey.dart';
+import 'utils/showAlert.dart';
 
 class HomeScreen extends StatefulWidget {
   final String accessToken;
-  final String username;
+  final String id;
+  final String url;
+  final String poin;
 
-  HomeScreen({required this.accessToken, required this.username});
+  HomeScreen({required this.accessToken, required this.id, required this.url, required this.poin});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState  extends  State<HomeScreen> {
-  Map<String, String> _userData = {};
-     
+  Map<String, String> _userData = {};       
 
   @override
   void initState() {
@@ -30,12 +32,12 @@ class _HomeScreenState  extends  State<HomeScreen> {
     _userData.addAll({"username": prefs.getString("username").toString(), "email": prefs.getString("email").toString()});    
   }
 
-  final List<Survey> availableSurveys = [
-    Survey('Survey 1', '10 Poin', '5 Pertanyaan'),
-    Survey('Survey 2', '8 Poin', '3 Pertanyaan'),
-    Survey('Survey 3', '12 Poin', '7 Pertanyaan'),
-    // Tambahkan survei lainnya sesuai kebutuhan
-  ];
+  // final List<Survey> availableSurveys = [
+  //   Survey('Survey 1', '10 Poin', '5 Pertanyaan'),
+  //   Survey('Survey 2', '8 Poin', '3 Pertanyaan'),
+  //   Survey('Survey 3', '12 Poin', '7 Pertanyaan'),
+  //   // Tambahkan survei lainnya sesuai kebutuhan
+  // ];
   
   Future<void> _handleLogout(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
@@ -61,90 +63,50 @@ class _HomeScreenState  extends  State<HomeScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Text(
-                //   // 'Total Poin: 30',
-                //   'Access Token: ',
-                //   style: TextStyle(fontSize: 18, color: Colors.white),
-                // ),
-                SelectableText(
-          widget.accessToken,
-          style: TextStyle(fontSize: 16),
-        ),
-                // ElevatedButton(
-                //   onPressed: () {
-                //     // Tambahkan logika untuk menu poin
-                //   },
-                //   style: ElevatedButton.styleFrom(
-                //     primary: Color(0xFFFD632D),
-                //   ),
-                //   child: Text('Redeem Poin'),
-                // ),
+                Text(
+                  'Total Poin: ' + widget.poin,
+                  // 'Access Token: ',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                ),
+        //         SelectableText(
+        //   widget.accessToken,
+        //   style: TextStyle(fontSize: 16),
+        // ),
+                ElevatedButton(
+                  onPressed: () {
+                    // Tambahkan logika untuk menu poin
+                    showAlert(context, 'This menu is currently unavailable');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFFFD632D),
+                  ),
+                  child: Text('Redeem Poin'),
+                ),
+                
               ],
             ),
-          ),
-          Expanded(
-        child: ListView.builder(
-          itemCount: availableSurveys.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => SurveyScreen(accessToken: widget.accessToken, id: widget.username, url: "random")));
-                  // Tambahkan logika ketika survei dipilih
-                  // Anda dapat membuka halaman survei atau melakukan tindakan lain sesuai kebutuhan
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFFF993C),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
+          ),          
+          ElevatedButton(
+                  onPressed: () {
+                    // Tambahkan logika untuk menu poin
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => CreateSurveyScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url)));
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFFFD632D),
                   ),
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      availableSurveys[index].name,
-                      style: TextStyle(fontSize: 20.0, color: Colors.white),
-                    ),
-                    SizedBox(height: 8.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.star,
-                          color: Colors.yellow,
-                        ),
-                        Text(
-                          availableSurveys[index].points,
-                          style: TextStyle(fontSize: 18.0, color: Colors.white),
-                        ),
-                        SizedBox(width: 10.0),
-                        Icon(
-                          Icons.question_answer,
-                          color: Colors.green,
-                        ),
-                        Text(
-                          availableSurveys[index].questions,
-                          style: TextStyle(fontSize: 18.0, color: Colors.white),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
-          ),
+                  child: Text('Make Your Own Question'),
+                ),                            
         ],
       ),
-      // floatingActionButton: Row(
-      //   mainAxisAlignment: MainAxisAlignment.end,
-      //   children: [
-      //     Text('Mulai Survey'),
-      //     Icon(Icons.arrow_forward),
-      //   ],
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {          
+          Navigator.push(context, MaterialPageRoute(builder: (context) => SurveyScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url)));
+        },
+        child: Icon(Icons.assignment),
+        backgroundColor: Color(0xFFFF993C),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      
       drawer: Drawer(
         child: Container(
           color: Color(0xFFFF993C),
@@ -167,25 +129,25 @@ class _HomeScreenState  extends  State<HomeScreen> {
                           decoration: BoxDecoration(
                             color: Color(0xFFFF993C),
                           ),
-                          onDetailsPressed: () {
-                            Navigator.of(context).pop();
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfileScreen()));
-                          },
+                          // onDetailsPressed: () {
+                          //   Navigator.of(context).pop();
+                          //   Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfileScreen()));
+                          // },
                         );                    
                     },
                   ),
-              ListTile(
-                  leading: Icon(Icons.home),
-                title: Text(
-                  'Home',
-                  style: TextStyle(color: Colors.white, fontSize: 18.0),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  // Navigasi ke halaman Home ketika "Home" di-klik
-                  // Tambahkan logika navigasi yang sesuai
-                },
-              ),
+              // ListTile(
+              //     leading: Icon(Icons.home),
+              //   title: Text(
+              //     'Home',
+              //     style: TextStyle(color: Colors.white, fontSize: 18.0),
+              //   ),
+              //   onTap: () {
+              //     Navigator.pop(context);
+              //     // Navigasi ke halaman Home ketika "Home" di-klik
+              //     // Tambahkan logika navigasi yang sesuai
+              //   },
+              // ),
               ListTile(
               leading: Icon(Icons.history), // Ikon untuk History
               title: Text(
@@ -194,7 +156,7 @@ class _HomeScreenState  extends  State<HomeScreen> {
               ),
               onTap: () {
                 Navigator.of(context).pop(); // Tutup sidebar
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => HistoryScreen())); // Navigasi ke halaman profil
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => MySurveyScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url))); // Navigasi ke halaman profil
               },
             ),
             // ListTile(

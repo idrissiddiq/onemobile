@@ -17,7 +17,7 @@ class _SubmitScreenState extends State<SubmitScreen> {
       checkToken().then((access_token){
             if(access_token!.isNotEmpty){
               checkUsername().then((username){
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(accessToken: access_token.toString(), username: username.toString())));
+                // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(accessToken: access_token.toString(), username: username.toString())));
               });              
             }
           }); 
