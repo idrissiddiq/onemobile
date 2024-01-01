@@ -136,7 +136,11 @@ class _SurveyScreenState extends State<SurveyScreen> {
         backgroundColor: Color(0xFFFD632D),
         title: Text('Survey'), 
       ),
-      body: Container(                                        
+      body: !hasRunAsync?
+        Center(
+        child: CircularProgressIndicator(),
+      )
+      :      Container(                                        
                     child: SingleChildScrollView(
                       padding: EdgeInsets.all(16.0),
           child: Column(
@@ -160,7 +164,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
                 },
                 title: Text(answerA),
                 activeColor: Color(0xFFFF993C),),
-                 RadioListTile(value: "B",
+                RadioListTile(value: "B",
                 groupValue: selectedAnswer,
                 onChanged: (value) {
                   setState(() {
@@ -169,24 +173,28 @@ class _SurveyScreenState extends State<SurveyScreen> {
                 },
                 title: Text(answerB),
                 activeColor: Color(0xFFFF993C),),
-                RadioListTile(value: "C",
-                groupValue: selectedAnswer,
-                onChanged: (value) {
-                  setState(() {
-                    selectedAnswer = value!;
-                  });
-                },
-                title: Text(answerC),
-                activeColor: Color(0xFFFF993C),),
-                RadioListTile(value: "D",
-                groupValue: selectedAnswer,
-                onChanged: (value) {
-                  setState(() {
-                    selectedAnswer = value!;
-                  });
-                },
-                title: Text(answerD),
-                activeColor: Color(0xFFFF993C),),
+                !answerC.isEmpty?                
+                  RadioListTile(value: "C",
+                  groupValue: selectedAnswer,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedAnswer = value!;
+                    });
+                  },
+                  title: Text(answerC),
+                  activeColor: Color(0xFFFF993C),)
+                : Text(""),
+                !answerD.isEmpty?                
+                  RadioListTile(value: "D",
+                  groupValue: selectedAnswer,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedAnswer = value!;
+                    });
+                  },
+                  title: Text(answerD),
+                  activeColor: Color(0xFFFF993C),)
+                : Text(""),
                 SizedBox(height: 20.0),
                 if (isLoading) CircularProgressIndicator()
                 else                                     

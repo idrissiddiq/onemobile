@@ -76,8 +76,8 @@ class _CreateSurveyScreenState extends State<CreateSurveyScreen> {
         title: Text('Survey Form'),
       ),
       body: Container(
-            child: Center(
-                child: SingleChildScrollView(
+            // child: Center(
+            //     child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -202,8 +202,8 @@ class _CreateSurveyScreenState extends State<CreateSurveyScreen> {
           ],
         ),
       ),
-    ),
-    ),
+    // ),
+    // ),
     );
   }
 }

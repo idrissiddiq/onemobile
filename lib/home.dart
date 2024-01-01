@@ -5,6 +5,9 @@ import 'mySurvey.dart';
 import 'survey.dart';
 import 'createSurvey.dart';
 import 'utils/showAlert.dart';
+import 'myAnswerHistory.dart';
+import 'redeem.dart';
+import 'myRedeem.dart';
 
 class HomeScreen extends StatefulWidget {
   final String accessToken;
@@ -75,7 +78,8 @@ class _HomeScreenState  extends  State<HomeScreen> {
                 ElevatedButton(
                   onPressed: () {
                     // Tambahkan logika untuk menu poin
-                    showAlert(context, 'This menu is currently unavailable');
+                    // showAlert(context, 'This menu is currently unavailable');
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => RedeemScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url, poin: widget.poin)));
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Color(0xFFFD632D),
@@ -149,9 +153,9 @@ class _HomeScreenState  extends  State<HomeScreen> {
               //   },
               // ),
               ListTile(
-              leading: Icon(Icons.history), // Ikon untuk History
+              leading: Icon(Icons.assignment), // Ikon untuk History
               title: Text(
-                'History',
+                'My Question',
                 style: TextStyle(color: Colors.white, fontSize: 18.0),
               ),
               onTap: () {
@@ -159,17 +163,28 @@ class _HomeScreenState  extends  State<HomeScreen> {
                 Navigator.of(context).push(MaterialPageRoute(builder: (context) => MySurveyScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url))); // Navigasi ke halaman profil
               },
             ),
-            // ListTile(
-            //   leading: Icon(Icons.dataset), // Ikon untuk History
-            //   title: Text(
-            //     'Data',
-            //     style: TextStyle(color: Colors.white, fontSize: 18.0),
-            //   ),
-            //   onTap: () {
-            //     Navigator.of(context).pop(); // Tutup sidebar
-            //     Navigator.of(context).push(MaterialPageRoute(builder: (context) => GitHubDataWidget(accessToken: accessToken.toString()))); // Navigasi ke halaman profil
-            //   },
-            // ),
+            ListTile(
+              leading: Icon(Icons.history), // Ikon untuk History
+              title: Text(
+                'History',
+                style: TextStyle(color: Colors.white, fontSize: 18.0),
+              ),
+              onTap: () {
+                Navigator.of(context).pop(); // Tutup sidebar
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyAnswerHistoryScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url))); // Navigasi ke halaman profil
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.money), // Ikon untuk History
+              title: Text(
+                'My Redeem',
+                style: TextStyle(color: Colors.white, fontSize: 18.0),
+              ),
+              onTap: () {
+                Navigator.of(context).pop(); // Tutup sidebar
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyRedeemScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url, poin: widget.poin))); // Navigasi ke halaman profil
+              },
+            ),
               ListTile(
                  leading: Icon(Icons.logout),
                 title: Text(

@@ -3,21 +3,20 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'utils/showAlert.dart';
 import 'dart:async';
-import 'mySurveyDetail.dart';
 
-class MySurveyScreen extends StatefulWidget {  
+class MyAnswerHistoryScreen extends StatefulWidget {  
   final String accessToken;
   final String id;
   final String url;
 
-  MySurveyScreen({required this.accessToken, required this.id, required this.url});
+  MyAnswerHistoryScreen({required this.accessToken, required this.id, required this.url});
   
   @override
-  _MySurveyScreenState createState() => _MySurveyScreenState();
+  _MyAnswerHistoryScreenState createState() => _MyAnswerHistoryScreenState();
 }
 
-class _MySurveyScreenState extends State<MySurveyScreen> {
-  List<Survey>? surveys;
+class _MyAnswerHistoryScreenState extends State<MyAnswerHistoryScreen> {
+  List<Answer>? answers;
   bool hasRunAsync = false;
 
   @override
@@ -41,7 +40,7 @@ class _MySurveyScreenState extends State<MySurveyScreen> {
         "id": widget.id
       };    
       final response = await http.post(
-        Uri.parse("${widget.url}survey/getMySurveyHistory"),
+        Uri.parse("${widget.url}answer/myAnswerHistory"),
         body: jsonEncode(data),
         headers: {
          "Content-Type": "application/json",
@@ -51,11 +50,11 @@ class _MySurveyScreenState extends State<MySurveyScreen> {
         final parsedJson = json.decode(response.body);
         final responseCode = parsedJson['responseCode'];
         if(responseCode == "200"){            
-            List<dynamic> surveyDataList = parsedJson['data'];        
-            surveys = [];    
-            for (var surveyData in surveyDataList) {
-              Survey survey = Survey.fromJson(surveyData);
-              surveys!.add(survey);
+            List<dynamic> answerDataList = parsedJson['data'];        
+            answers = [];    
+            for (var answerData in answerDataList) {
+              Answer answer = Answer.fromJson(answerData);
+              answers!.add(answer);
             }
             // question = data['question'];
             // answerA = data['answerA'];
@@ -83,7 +82,7 @@ class _MySurveyScreenState extends State<MySurveyScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFFFD632D),
-        title: Text('My Question'),
+        title: Text('History'),
       ),
       body: !hasRunAsync
       ? Center(
@@ -93,19 +92,12 @@ class _MySurveyScreenState extends State<MySurveyScreen> {
         children: [          
           Expanded(
             child: ListView.builder(
-              itemCount: surveys!.length,
+              itemCount: answers!.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(surveys![index].question),
-                  subtitle: Text(surveys![index].answerCount.toString() + " Answered"),
-                  trailing: ElevatedButton(onPressed: () {
-                    // showAlert(context, 'This menu is currently unavailable');
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MySurveyDetailScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url, surveyId: surveys![index].id.toString())));
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Color(0xFFFD632D),
-                  ),
-                  child: Text('Detail')),
+                  title: Text(answers![index].question),
+                  subtitle: Text("By " + answers![index].ownerUsername),
+                  trailing: Text(answers![index].answer),
                 );
               },
             ),
@@ -125,18 +117,18 @@ class _MySurveyScreenState extends State<MySurveyScreen> {
   // }
 }
 
-class Survey {
-  final int id;
+class Answer {  
   final String question;
-  final int answerCount;
+  final String ownerUsername;
+  final String answer;  
 
-  Survey({required this.id, required this.question, required this.answerCount});
+  Answer({required this.question, required this.ownerUsername, required this.answer});
 
-  factory Survey.fromJson(Map<String, dynamic> json) {
-    return Survey(
-      id: json['id'],
+  factory Answer.fromJson(Map<String, dynamic> json) {
+    return Answer(
       question: json['question'],
-      answerCount: json['answerCount'],
+      ownerUsername: json['ownerUsername'],
+      answer: json['answer'],
     );
   }
 }

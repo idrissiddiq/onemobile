@@ -19,7 +19,7 @@ class _LoginScreenState extends State<LoginForm>  {
     });
     try {
     final prefs = await SharedPreferences.getInstance();    
-    String url = "http://192.168.43.146:8080/onemobile/api/";    
+    String url = "http://192.168.1.7:8080/onemobile/api/";    
     prefs.setString('url', url);
     final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;      
     if (isLoggedIn) {      
