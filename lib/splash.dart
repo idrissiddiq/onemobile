@@ -11,8 +11,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    super.initState();
-    // Tambahkan delay untuk simulasi tampilan splash
+    super.initState();    
     Future.delayed(Duration(seconds: 2), () {
       checkLoginStatus().then((isLoggedIn) {
         if (isLoggedIn) {
@@ -21,14 +20,18 @@ class _SplashScreenState extends State<SplashScreen> {
               checkId().then((id){
                 checkUrl().then((url){
                   checkPoin().then((poin){
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SurveyScreen(accessToken: access_token.toString(), id: id.toString(), url: url.toString())));
+                    checkUsername().then((username){
+                      checkEmail().then((email){
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SurveyScreen(accessToken: access_token.toString(), id: id.toString(), url: url.toString(), username: username.toString(), email: email.toString(), poin: poin.toString())));                    
+                      });
+                    });                    
                   });                  
                 });                
               });              
             }
           });          
         } else {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginForm()));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginForm()));          
         }
       });
     });
@@ -59,6 +62,16 @@ class _SplashScreenState extends State<SplashScreen> {
     return prefs.getString('url');
   }
 
+  Future<String?> checkUsername() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('username');
+  }
+
+  Future<String?> checkEmail() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('email');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,15 +79,14 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
          child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Tambahkan logo di bawah ini
+          children: [            
             Image.asset(
-              'images/logo.png', // Ganti dengan path logo yang sesuai
+              'images/logo.png', 
               width: 120.0,
               height: 120.0,
             ),
-            SizedBox(height: 20.0), // Berikan jarak antara logo dan CircularProgressIndicator
-            CircularProgressIndicator(), // Anda dapat menyesuaikan tampilan CircularProgressIndicator
+            SizedBox(height: 20.0), 
+            CircularProgressIndicator(), 
           ],
         ),
       ),

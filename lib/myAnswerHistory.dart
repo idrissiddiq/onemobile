@@ -55,14 +55,7 @@ class _MyAnswerHistoryScreenState extends State<MyAnswerHistoryScreen> {
             for (var answerData in answerDataList) {
               Answer answer = Answer.fromJson(answerData);
               answers!.add(answer);
-            }
-            // question = data['question'];
-            // answerA = data['answerA'];
-            // answerB = data['answerB'];
-            // answerC = data['answerC'];
-            // answerD = data['answerD'];
-            // ownerUsername = data['ownerUsername'];
-            // surveyId = data['surveyId'].toString();            
+            }        
         } else{
           surveyErrorAlert(context, parsedJson['responseMessage']);          
           throw Exception("HTTP Error: ${response.statusCode}");
@@ -106,15 +99,6 @@ class _MyAnswerHistoryScreenState extends State<MyAnswerHistoryScreen> {
       ),
     );
   }
-
-  // int calculateTotalPointsEarned(List<CompletedSurvey> surveys) {
-  //   int totalPoints = 0;
-  //   for (var survey in surveys) {
-  //     // Parsing jumlah poin dari string dan menambahkannya ke totalPoints
-  //     totalPoints += int.parse(survey.points.split(' ')[0]);
-  //   }
-  //   return totalPoints;
-  // }
 }
 
 class Answer {  

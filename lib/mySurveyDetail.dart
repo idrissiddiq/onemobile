@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'utils/showAlert.dart';
-import 'home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MySurveyDetailScreen extends StatefulWidget {
@@ -71,9 +70,7 @@ class _MySurveyDetailScreenState extends State<MySurveyDetailScreen> {
             answerA = data['answerA'];
             answerB = data['answerB'];
             answerC = data['answerC'];
-            answerD = data['answerD'];
-            // ownerUsername = data['ownerUsername'];
-            // surveyId = data['surveyId'].toString();            
+            answerD = data['answerD'];            
         } else{
           surveyErrorAlert(context, parsedJson['responseMessage']);          
           throw Exception("HTTP Error: ${response.statusCode}");
@@ -88,57 +85,18 @@ class _MySurveyDetailScreenState extends State<MySurveyDetailScreen> {
     }
   }
 
-  // Future<void> _submitSurvey() async {    
-  //   try {            
-  //     final data = {
-  //       "token": widget.accessToken,
-  //       "id": widget.id,
-  //       "surveyId": surveyId,
-  //       "answer": selectedAnswer
-  //     };    
-  //     final response = await http.post(
-  //       Uri.parse("${widget.url}answer/submitAnswer"),
-  //       body: jsonEncode(data),
-  //       headers: {
-  //        "Content-Type": "application/json",
-  //       },
-  //     );
-  //     if (response.statusCode == 200) {          
-  //       final parsedJson = json.decode(response.body);
-  //       final responseCode = parsedJson['responseCode'];
-  //       if(responseCode == "200"){             
-  //         poin = poin + 1;
-  //         final prefs = await SharedPreferences.getInstance(); 
-  //         await prefs.setInt('poin', poin);
-  //       } else{
-  //         showAlert(context, parsedJson['responseMessage']);          
-  //       }                    
-  //       } else {          
-  //         showAlert(context, "HTTP Error: ${response.statusCode}");          
-  //       }              
-  //   } catch (e) {
-  //   showAlert(context, 'Error: $e');    
-  //   }
-  //   setState(() {
-  //     isLoading = false;
-  //   });
-  //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SurveyScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url)));
-  // }  
-
   @override
   Widget build(BuildContext context) {     
     return Scaffold(
-      appBar: AppBar(
-        // leading: IconButton(
-        //     icon: Icon(Icons.arrow_back),
-        //     onPressed: () {              
-        //       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url, poin: poin.toString())));
-        //     },
-        //   ),
+      appBar: AppBar(        
         backgroundColor: Color(0xFFFD632D),
         title: Text('My Survey Detail'), 
       ),
-      body: Container(                                        
+      body: !hasRunAsync?
+        Center(
+        child: CircularProgressIndicator(),
+      )
+      :   Container(                                        
                     child: SingleChildScrollView(
                       padding: EdgeInsets.all(16.0),
           child: Column(

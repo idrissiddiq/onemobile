@@ -73,11 +73,10 @@ class _CreateSurveyScreenState extends State<CreateSurveyScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFFFD632D),
-        title: Text('Survey Form'),
+        title: Text('Create Question'),
       ),
-      body: Container(
-            // child: Center(
-            //     child: SingleChildScrollView(
+      resizeToAvoidBottomInset: false,
+      body: Container(            
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -180,8 +179,7 @@ class _CreateSurveyScreenState extends State<CreateSurveyScreen> {
             if (isLoading) CircularProgressIndicator()
             else 
             ElevatedButton(
-              onPressed: () {
-                // Lakukan sesuatu dengan pertanyaan dan jawaban yang dimasukkan, misalnya simpan ke database atau tampilkan pesan                
+              onPressed: () {                
                 if (question.isNotEmpty && answerA.isNotEmpty && answerB.isNotEmpty){
                   setState(() {
                         isLoading = true;
@@ -201,9 +199,7 @@ class _CreateSurveyScreenState extends State<CreateSurveyScreen> {
                 )
           ],
         ),
-      ),
-    // ),
-    // ),
+      ),    
     );
   }
 }

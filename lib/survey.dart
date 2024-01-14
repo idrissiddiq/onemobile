@@ -3,15 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'utils/showAlert.dart';
-import 'home.dart';
+import 'newHome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SurveyScreen extends StatefulWidget {
   final String accessToken;
   final String id;
+  final String username;
+  final String email;
   final String url;
+  final String poin;
 
-  SurveyScreen({required this.accessToken, required this.id, required this.url});
+  SurveyScreen({required this.accessToken, required this.id, required this.username, required this.email, required this.url, required this.poin});
 
   @override
   _SurveyScreenState createState() => _SurveyScreenState();
@@ -26,10 +29,10 @@ class _SurveyScreenState extends State<SurveyScreen> {
   String answerC = "Loading.....";
   String answerD = "Loading.....";
   String ownerUsername = "Loading.....";
-  String surveyId = "";
-  int poin = 0;
+  String surveyId = "";  
   bool hasRunAsync = false;
   bool isLoading = false;
+  int poinTemp = 0;
 
   @override
   void initState() {
@@ -45,9 +48,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
     });
   }
 
-  Future<void> _fetchSurvey() async {    
-    final prefs = await SharedPreferences.getInstance(); 
-    poin = prefs.getInt('poin')!.toInt();
+  Future<void> _fetchSurvey() async {        
     try {      
       final data = {
         "token": widget.accessToken,
@@ -105,9 +106,9 @@ class _SurveyScreenState extends State<SurveyScreen> {
         final parsedJson = json.decode(response.body);
         final responseCode = parsedJson['responseCode'];
         if(responseCode == "200"){             
-          poin = poin + 1;
+          poinTemp = int.parse(widget.poin) + 1;
           final prefs = await SharedPreferences.getInstance(); 
-          await prefs.setInt('poin', poin);
+          await prefs.setInt('poin', poinTemp);
         } else{
           showAlert(context, parsedJson['responseMessage']);          
         }                    
@@ -120,7 +121,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
     setState(() {
       isLoading = false;
     });
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SurveyScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url)));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SurveyScreen(accessToken: widget.accessToken, id: widget.id, username: widget.username, email: widget.email, poin: widget.poin, url: widget.url)));
   }  
 
   @override
@@ -130,7 +131,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
         leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {              
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url, poin: poin.toString())));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(accessToken: widget.accessToken, id: widget.id, username: widget.username, email: widget.email, poin: widget.poin, url: widget.url)));
             },
           ),
         backgroundColor: Color(0xFFFD632D),

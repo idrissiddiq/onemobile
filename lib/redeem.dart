@@ -28,8 +28,7 @@ class _RedeemScreenState extends State<RedeemScreen> {
   String selectedNominal = '10,000';
   String selectedChannel = '';
 
-  List<String> nominals = ['10,000', '30,000', '50,000', '100,000'];
-  // List<String> channels = ['DANA', 'OVO', 'GoPay', 'LinkAja'];
+  List<String> nominals = ['10,000', '30,000', '50,000', '100,000'];  
 
   List<Channel>? channels;
 
