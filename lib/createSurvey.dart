@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:oneopinion/home.dart';
+import 'package:oneopinion/newHome.dart';
 import 'dart:convert';
 import 'utils/showAlert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,8 +10,11 @@ class CreateSurveyScreen extends StatefulWidget {
   final String accessToken;
   final String id;
   final String url;
+  final String poin;
+  final String username;
+  final String email;
 
-  CreateSurveyScreen({required this.accessToken, required this.id, required this.url});
+  CreateSurveyScreen({required this.accessToken, required this.id, required this.url, required this.email, required this.poin, required this.username});
 
   @override
   _CreateSurveyScreenState createState() => _CreateSurveyScreenState();
@@ -51,9 +54,8 @@ class _CreateSurveyScreenState extends State<CreateSurveyScreen> {
       if (response.statusCode == 200) {          
         final parsedJson = json.decode(response.body);
         final responseCode = parsedJson['responseCode'];
-        if(responseCode == "200"){             
-          final prefs = await SharedPreferences.getInstance();           
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url, poin: prefs.getInt('poin').toString())));
+        if(responseCode == "200"){                                
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url, poin: widget.poin, username: widget.username, email: widget.email)));
         } else{
           showAlert(context, parsedJson['responseMessage']);          
         }                    

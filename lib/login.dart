@@ -15,7 +15,7 @@ class LoginForm extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginForm>  {
   bool isLoading = false;
-  String url = "http://192.168.1.6:8080/onemobile/api/";
+  String url = "https://onecreative.my.id/apidev/public/api/";
 
   Future<void> _handleGitHubLogin(BuildContext context) async {
     setState(() {
@@ -41,7 +41,7 @@ class _LoginScreenState extends State<LoginForm>  {
           "modeId": '1',         
         };    
         final response = await http.post(
-          Uri.parse("${url}user/setToken"),
+          Uri.parse("https://onecreative.my.id/apidev/public/api/user"),
           body: jsonEncode(data),
           headers: {
              "Content-Type": "application/json",

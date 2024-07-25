@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'utils/showAlert.dart';
-import 'home.dart';
+import 'newHome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RedeemScreen extends StatefulWidget {
@@ -11,8 +11,10 @@ class RedeemScreen extends StatefulWidget {
   final String id;
   final String url;
   final String poin;
+  final String username;
+  final String email;
 
-  RedeemScreen({required this.accessToken, required this.id, required this.url, required this.poin});
+  RedeemScreen({required this.accessToken, required this.id, required this.url, required this.poin, required this.username, required this.email});
 
   @override
   _RedeemScreenState createState() => _RedeemScreenState();
@@ -106,7 +108,7 @@ class _RedeemScreenState extends State<RedeemScreen> {
         if(responseCode == "200"){             
           final prefs = await SharedPreferences.getInstance();               
           await prefs.setInt('poin', int.parse(widget.poin) - int.parse(selectedNominal.replaceAll(',', '')));        
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url, poin: prefs.getInt('poin').toString())));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url, poin: prefs.getInt('poin').toString(), email: widget.email, username: widget.username)));
         } else{
           showAlert(context, parsedJson['responseMessage']);          
         }                    
@@ -129,7 +131,7 @@ class _RedeemScreenState extends State<RedeemScreen> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {              
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url, poin: widget.poin)));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url, poin: widget.poin, email: widget.email, username: widget.username)));
             },
           ),
           backgroundColor: Color(0xFFFD632D),
@@ -225,7 +227,7 @@ class _RedeemScreenState extends State<RedeemScreen> {
 }
 
 class Channel {  
-  final int id;
+  final String id;
   final String channelName;  
 
   Channel({required this.id, required this.channelName});

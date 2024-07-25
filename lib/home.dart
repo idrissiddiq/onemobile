@@ -79,7 +79,7 @@ class _HomeScreenState  extends  State<HomeScreen> {
                   onPressed: () {
                     // Tambahkan logika untuk menu poin
                     // showAlert(context, 'This menu is currently unavailable');
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => RedeemScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url, poin: widget.poin)));
+                    // Navigator.push(context, MaterialPageRoute(builder: (context) => RedeemScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url, poin: widget.poin)));
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Color(0xFFFD632D),
@@ -93,7 +93,7 @@ class _HomeScreenState  extends  State<HomeScreen> {
           ElevatedButton(
                   onPressed: () {
                     // Tambahkan logika untuk menu poin
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => CreateSurveyScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url)));
+                    // Navigator.push(context, MaterialPageRoute(builder: (context) => CreateSurveyScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url)));
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Color(0xFFFD632D),
@@ -182,7 +182,7 @@ class _HomeScreenState  extends  State<HomeScreen> {
               ),
               onTap: () {
                 Navigator.of(context).pop(); // Tutup sidebar
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyRedeemScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url, poin: widget.poin))); // Navigasi ke halaman profil
+                // Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyRedeemScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url, poin: widget.poin))); // Navigasi ke halaman profil
               },
             ),
               ListTile(

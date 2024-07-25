@@ -109,6 +109,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
           poinTemp = int.parse(widget.poin) + 1;
           final prefs = await SharedPreferences.getInstance(); 
           await prefs.setInt('poin', poinTemp);
+
         } else{
           showAlert(context, parsedJson['responseMessage']);          
         }                    
@@ -121,7 +122,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
     setState(() {
       isLoading = false;
     });
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SurveyScreen(accessToken: widget.accessToken, id: widget.id, username: widget.username, email: widget.email, poin: widget.poin, url: widget.url)));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SurveyScreen(accessToken: widget.accessToken, id: widget.id, username: widget.username, email: widget.email, poin: poinTemp.toString(), url: widget.url)));
   }  
 
   @override

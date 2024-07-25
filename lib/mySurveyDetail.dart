@@ -132,7 +132,7 @@ class Survey {
   final String answerB;
   final String answerC;
   final String answerD;
-  final int surveyId;  
+  final String surveyId;  
 
   Survey(this.questions, this.answerA, this.answerB, this.answerC, this.answerD, this.surveyId);
 }

@@ -110,9 +110,9 @@ class _MySurveyScreenState extends State<MySurveyScreen> {
 }
 
 class Survey {
-  final int id;
+  final String id;
   final String question;
-  final int answerCount;
+  final String answerCount;
 
   Survey({required this.id, required this.question, required this.answerCount});
 

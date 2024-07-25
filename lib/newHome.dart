@@ -173,7 +173,7 @@ class _HomeScreenState  extends  State<HomeScreen> {
                                               top: 0*fem,                                              
                                                 child: ElevatedButton(
                                                   onPressed: () {                                                    
-                                                    Navigator.push(context, MaterialPageRoute(builder: (context) => RedeemScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url, poin: widget.poin)));
+                                                    Navigator.push(context, MaterialPageRoute(builder: (context) => RedeemScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url, poin: widget.poin, email: widget.email, username: widget.username)));
                                                   },
                                                   style: ElevatedButton.styleFrom(
                                                     primary: Color(0xFFFFFFFF),                                                    
@@ -258,7 +258,7 @@ class _HomeScreenState  extends  State<HomeScreen> {
                 ),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateSurveyScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url)));                  
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateSurveyScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url, email: widget.email, username: widget.username, poin: widget.poin)));                  
                 },
               ),
               ListTile(
@@ -291,7 +291,7 @@ class _HomeScreenState  extends  State<HomeScreen> {
               ),
               onTap: () {
                 Navigator.of(context).pop(); 
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyRedeemScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url, poin: widget.poin))); // Navigasi ke halaman profil
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyRedeemScreen(accessToken: widget.accessToken, id: widget.id, username: widget.username, email: widget.email, url: widget.url, poin: widget.poin))); // Navigasi ke halaman profil
               },
             ),
               ListTile(

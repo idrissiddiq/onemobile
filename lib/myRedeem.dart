@@ -4,15 +4,17 @@ import 'dart:convert';
 import 'utils/showAlert.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'home.dart';
+import 'newHome.dart';
 
 class MyRedeemScreen extends StatefulWidget {  
   final String accessToken;
   final String id;
+  final String username;
+  final String email;
   final String url;
   final String poin;
 
-  MyRedeemScreen({required this.accessToken, required this.id, required this.url, required this.poin});
+  MyRedeemScreen({required this.accessToken, required this.id, required this.username, required this.email, required this.url, required this.poin});
   
   @override
   _MyRedeemScreenState createState() => _MyRedeemScreenState();
@@ -94,7 +96,7 @@ class _MyRedeemScreenState extends State<MyRedeemScreen> {
         if(responseCode == "200"){             
           final prefs = await SharedPreferences.getInstance();               
           await prefs.setInt('poin', int.parse(widget.poin) + amount);        
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(accessToken: widget.accessToken, id: widget.id, url: widget.url, poin: (int.parse(widget.poin) + amount).toString())));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(accessToken: widget.accessToken, id: widget.id, username: widget.username, email: widget.email, url: widget.url, poin: (int.parse(widget.poin) + amount).toString())));
         } else{
           showAlert(context, parsedJson['responseMessage']);          
         }                    
@@ -140,7 +142,7 @@ class _MyRedeemScreenState extends State<MyRedeemScreen> {
                       setState(() {
                         isLoading = true;
                       });
-                      _cancelRedeem(redeems![index].id.toString(), redeems![index].amount); 
+                      _cancelRedeem(redeems![index].id.toString(), int.parse(redeems![index].amount)); 
                     },
                     style: ElevatedButton.styleFrom(
                             primary: Color(0xFFFD632D),
@@ -159,9 +161,9 @@ class _MyRedeemScreenState extends State<MyRedeemScreen> {
 }
 
 class Redeem {  
-  final int id;
+  final String id;
   final String status;
-  final int amount; 
+  final String amount; 
   final String transferNumber;
   final String createdDate;
   final String channelName;
