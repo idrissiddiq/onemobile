@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'utils/showAlert.dart';
+import 'utils/adHelper.dart';
 import 'newHome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,7 +38,9 @@ class _RedeemScreenState extends State<RedeemScreen> {
 
   @override
   void initState() {
-    super.initState();            
+    super.initState();           
+    AdHelper.bannerAd?.dispose(); 
+    AdHelper.loadBannerAd();         
     Future.delayed(Duration.zero, () async {
       if (!hasRunAsync) {
         await _fetchChannel();
@@ -220,7 +224,14 @@ class _RedeemScreenState extends State<RedeemScreen> {
                   style: TextStyle(color: Colors.red),
                 )
         ],
-      ),),
+      ),
+      ),
+      bottomNavigationBar: AdHelper.bannerAd != null
+        ? Container(
+              height: AdHelper.bannerAd!.size.height.toDouble(),
+              child: AdWidget(ad: AdHelper.bannerAd!),
+            )
+          : null,
       ),
     );    
   }

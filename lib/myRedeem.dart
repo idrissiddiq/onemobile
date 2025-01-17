@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'dart:convert';
 import 'utils/showAlert.dart';
+import 'utils/adHelper.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'newHome.dart';
@@ -27,7 +29,9 @@ class _MyRedeemScreenState extends State<MyRedeemScreen> {
 
   @override
   void initState() {
-    super.initState();            
+    super.initState();   
+    AdHelper.bannerAd?.dispose();
+    AdHelper.loadBannerAd();           
     Future.delayed(Duration.zero, () async {
       if (!hasRunAsync) {
         await _fetchRedeem();
@@ -123,7 +127,12 @@ class _MyRedeemScreenState extends State<MyRedeemScreen> {
         child: CircularProgressIndicator(),
       )
       : Column(
-        children: [          
+        children: [    
+          if (AdHelper.bannerAd != null)
+                Container(
+                  height: AdHelper.bannerAd!.size.height.toDouble(),
+                  child: AdWidget(ad: AdHelper.bannerAd!),
+                ),          
           Expanded(
             child: ListView.builder(
               itemCount: redeems!.length,

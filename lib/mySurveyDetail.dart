@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'utils/showAlert.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'utils/showAlert.dart';
+import 'utils/adHelper.dart';
 
 class MySurveyDetailScreen extends StatefulWidget {
   final String accessToken;
@@ -33,7 +35,9 @@ class _MySurveyDetailScreenState extends State<MySurveyDetailScreen> {
 
   @override
   void initState() {
-    super.initState();            
+    super.initState();  
+    AdHelper.bannerAd?.dispose();
+    AdHelper.loadBannerAd();          
     Future.delayed(Duration.zero, () async {
       if (!hasRunAsync) {
         await _fetchSurvey();
@@ -121,6 +125,12 @@ class _MySurveyDetailScreenState extends State<MySurveyDetailScreen> {
       // },
     // ),
   ),
+  bottomNavigationBar: AdHelper.bannerAd != null
+          ? Container(
+              height: AdHelper.bannerAd!.size.height.toDouble(),
+              child: AdWidget(ad: AdHelper.bannerAd!),
+            )
+          : null,
   );
   }
   

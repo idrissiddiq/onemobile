@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'dart:ui';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'utils/utils.dart';
+import 'utils/adHelper.dart';
 import 'main.dart';
 import 'mySurvey.dart';
 import 'survey.dart';
@@ -31,6 +32,8 @@ class _HomeScreenState  extends  State<HomeScreen> {
   void initState() {
     super.initState();    
     _fetchUserData();
+    AdHelper.bannerAd?.dispose();
+    AdHelper.loadBannerAd();
   }
 
   Future<void> _fetchUserData() async {
@@ -220,6 +223,13 @@ class _HomeScreenState  extends  State<HomeScreen> {
         backgroundColor: Color(0xFFFF993C),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      
+      bottomNavigationBar: AdHelper.bannerAd != null
+          ? Container(
+              height: AdHelper.bannerAd!.size.height.toDouble(),
+              child: AdWidget(ad: AdHelper.bannerAd!),
+            )
+          : null,
       
       drawer: Drawer(
         child: Container(

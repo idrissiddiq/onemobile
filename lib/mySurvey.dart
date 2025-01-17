@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'dart:convert';
-import 'utils/showAlert.dart';
 import 'dart:async';
+import 'utils/showAlert.dart';
+import 'utils/adHelper.dart';
 import 'mySurveyDetail.dart';
 
 class MySurveyScreen extends StatefulWidget {  
@@ -19,10 +21,13 @@ class MySurveyScreen extends StatefulWidget {
 class _MySurveyScreenState extends State<MySurveyScreen> {
   List<Survey>? surveys;
   bool hasRunAsync = false;
+  bool isAdWidgetAdded = false;
 
   @override
   void initState() {
-    super.initState();            
+    super.initState();  
+    AdHelper.bannerAd?.dispose();
+    AdHelper.loadBannerAd();          
     Future.delayed(Duration.zero, () async {
       if (!hasRunAsync) {
         await _fetchSurvey();
@@ -31,7 +36,7 @@ class _MySurveyScreenState extends State<MySurveyScreen> {
           hasRunAsync = true;
         });
       }
-    });
+    });    
   }
 
   Future<void> _fetchSurvey() async {    
@@ -83,7 +88,12 @@ class _MySurveyScreenState extends State<MySurveyScreen> {
         child: CircularProgressIndicator(),
       )
       : Column(
-        children: [          
+        children: [      
+          if (AdHelper.bannerAd != null)
+                Container(
+                  height: AdHelper.bannerAd!.size.height.toDouble(),
+                  child: AdWidget(ad: AdHelper.bannerAd!),
+                ),             
           Expanded(
             child: ListView.builder(
               itemCount: surveys!.length,

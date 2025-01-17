@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'dart:convert';
 import 'utils/showAlert.dart';
+import 'utils/adHelper.dart';
 import 'dart:async';
 
 class MyAnswerHistoryScreen extends StatefulWidget {  
@@ -21,7 +23,9 @@ class _MyAnswerHistoryScreenState extends State<MyAnswerHistoryScreen> {
 
   @override
   void initState() {
-    super.initState();            
+    super.initState();         
+    AdHelper.bannerAd?.dispose();
+    AdHelper.loadBannerAd();   
     Future.delayed(Duration.zero, () async {
       if (!hasRunAsync) {
         await _fetchSurvey();
@@ -82,7 +86,12 @@ class _MyAnswerHistoryScreenState extends State<MyAnswerHistoryScreen> {
         child: CircularProgressIndicator(),
       )
       : Column(
-        children: [          
+        children: [       
+          if (AdHelper.bannerAd != null)
+                Container(
+                  height: AdHelper.bannerAd!.size.height.toDouble(),
+                  child: AdWidget(ad: AdHelper.bannerAd!),
+                ),    
           Expanded(
             child: ListView.builder(
               itemCount: answers!.length,
