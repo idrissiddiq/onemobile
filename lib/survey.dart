@@ -214,7 +214,9 @@ class _SurveyScreenState extends State<SurveyScreen> {
                       setState(() {
                         isLoading = true;
                       });
-                      _submitSurvey();                   
+                      AdHelper.showInterstitialAd(() {
+                        _submitSurvey();  
+                      });                                       
                     }                                    
                   },
                   style: ElevatedButton.styleFrom(

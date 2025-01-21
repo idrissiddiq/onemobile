@@ -3,6 +3,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'utils/utils.dart';
 import 'utils/adHelper.dart';
+import 'dart:async';
 import 'main.dart';
 import 'mySurvey.dart';
 import 'survey.dart';
@@ -26,14 +27,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState  extends  State<HomeScreen> {
-  Map<String, String> _userData = {};       
+  Map<String, String> _userData = {};    
 
   @override
   void initState() {
     super.initState();    
-    _fetchUserData();
-    AdHelper.bannerAd?.dispose();
-    AdHelper.loadBannerAd();
+    _fetchUserData();    
+    AdHelper.refreshBannerAd();
+    AdHelper.loadInterstitialAd(); 
   }
 
   Future<void> _fetchUserData() async {
@@ -217,7 +218,21 @@ class _HomeScreenState  extends  State<HomeScreen> {
           ),
           floatingActionButton: FloatingActionButton(
         onPressed: () {          
-          Navigator.push(context, MaterialPageRoute(builder: (context) => SurveyScreen(accessToken: widget.accessToken, id: widget.id, username: widget.username, email: widget.email, poin: widget.poin, url: widget.url)));
+          AdHelper.showInterstitialAd(() {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SurveyScreen(
+                  accessToken: widget.accessToken,
+                  id: widget.id,
+                  username: widget.username,
+                  email: widget.email,
+                  poin: widget.poin,
+                  url: widget.url,
+                ),
+              )
+            );
+          });
         },
         child: Icon(Icons.assignment),
         backgroundColor: Color(0xFFFF993C),
