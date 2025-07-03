@@ -1,16 +1,37 @@
-# oneopinion
+# OneMobile – User-to-User Survey App
 
-A new Flutter project.
+**OneMobile** is a mobile application built using **Flutter** that enables users to create, share, and respond to surveys — from users, for users. Designed with simplicity and accessibility in mind, OneMobile streamlines the process of gathering opinions and feedback directly from real users.
 
-## Getting Started
+## 📱 Features
 
-This project is a starting point for a Flutter application.
+- 🔐 User OAuth based login
+- 📝 Create custom surveys
+- 📊 Answer surveys from other users in real-time
+- 🌐 API integration for syncing with backend services
 
-A few resources to get you started if this is your first Flutter project:
+## 🚀 Tech Stack
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **Flutter** (Dart)
+- **Android SDK**
+- **Provider / BLoC** (state management)
+- **REST API** (integrated with backend)
+- **Firebase / Local DB** *(if used)*
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 📦 Getting Started
+
+### Prerequisites
+
+- Flutter SDK (version 3.x or later)
+- Android Studio or VS Code
+- Emulator or Android device
+
+### Clone and Run
+
+```bash
+git clone https://github.com/idrissiddiq/onemobile.git
+cd onemobile
+flutter pub get
+flutter run
+```
+Built with Flutter ❤️ to make user feedback simple and accessible.
+
