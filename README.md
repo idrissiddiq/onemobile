@@ -13,9 +13,7 @@
 
 - **Flutter** (Dart)
 - **Android SDK**
-- **Provider / BLoC** (state management)
 - **REST API** (integrated with backend)
-- **Firebase / Local DB** *(if used)*
 
 ## 📦 Getting Started
 
