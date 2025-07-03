@@ -15,7 +15,7 @@ class LoginForm extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginForm>  {
   bool isLoading = false;
-  String url = "https://onecreative.my.id/apidev/public/api/";
+  String url = "https://test.my.id/apidev/public/api/";
 
   Future<void> _handleGitHubLogin(BuildContext context) async {
     setState(() {
@@ -32,7 +32,7 @@ class _LoginScreenState extends State<LoginForm>  {
     });
     } else {      
       final result = await FlutterWebAuth.authenticate(
-      url: 'https://github.com/login/oauth/authorize?client_id=b7075d1df11ac68c2983&scope=user',
+      url: 'https://github.com/login/oauth/authorize?client_id=client_id_test&scope=user',
       callbackUrlScheme: 'oneopinion', // Ganti dengan skema kustom yang Anda konfigurasi
     );    
     if (result.isNotEmpty) {                            
@@ -41,7 +41,7 @@ class _LoginScreenState extends State<LoginForm>  {
           "modeId": '1',         
         };    
         final response = await http.post(
-          Uri.parse("https://onecreative.my.id/apidev/public/api/user"),
+          Uri.parse("https://test.my.id/apidev/public/api/user"),
           body: jsonEncode(data),
           headers: {
              "Content-Type": "application/json",
@@ -84,9 +84,9 @@ class _LoginScreenState extends State<LoginForm>  {
   }
 
   Future<void> loginWithFacebook(BuildContext context) async {    
-    final String facebookAppId = '176535092216157';
+    final String facebookAppId = 'app_id_test';
     final String redirectUri = 'https://192.168.1.6/redirect/index.html'; 
-    final String clientSecret = '7d01a669ee3e9315174ed8b5da78628f';
+    final String clientSecret = 'client_secret_test';
     setState(() {
       isLoading = true;
     });   
